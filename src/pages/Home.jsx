@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import Navbar from "../component/Navbar";
 
 function Home() {
   return (
+    <>
+    <Navbar />
     <div className="hero min-h-screen bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 text-white">
+
       <div className="hero-content text-center">
         <div>
           <h1 className="text-5xl font-extrabold mb-6">
@@ -22,6 +26,7 @@ function Home() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
