@@ -1,7 +1,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { FiHome, FiGrid, FiFileText, FiSend, FiPhone, FiLogOut } from 'react-icons/fi';
-import { PieChart } from 'lucide-react';
-
+import {
+  FiHome,
+  FiGrid,
+  FiFileText,
+  FiSend,
+  FiPhone,
+  FiLogOut,
+  FiMenu,
+  FiX
+} from 'react-icons/fi';
+import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +19,7 @@ const API = import.meta.env.VITE_API_BASE_URL;
 function Dashboard({ user }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchForms = async () => {
     const { data } = await axios.get(`${API}/api/v1/user/my-forms`, {
@@ -51,14 +60,34 @@ function Dashboard({ user }) {
   const logout = async () => {
     await axios.post(`${API}/api/v1/user/logout`, {}, { withCredentials: true });
     toast.success("Logged out successfully");
-    navigate('/login');
+    navigate('/');
   };
 
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-base-200 p-4 hidden md:flex flex-col border-r">
-        <h2 className="text-xl font-bold mb-6">Menu</h2>
+    <div className="flex flex-col md:flex-row h-screen">
+      {/* Mobile Navbar */}
+      <div className="flex md:hidden justify-between items-center bg-base-200 p-4 border-b">
+        <div className="flex items-center gap-2">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="btn btn-ghost btn-circle">
+            <FiMenu size={20} />
+          </button>
+          <span className="font-semibold text-lg">Dashboard</span>
+        </div>
+        <button onClick={logout} className="btn btn-sm btn-outline text-red-500">
+          Logout
+        </button>
+      </div>
+
+      {/* Sidebar Drawer */}
+      <aside
+        className={`bg-base-200 w-full md:w-64 p-4 flex-col border-r z-10 fixed top-0 left-0 h-full transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:block`}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-xl font-bold">Menu</h2>
+          <button onClick={() => setSidebarOpen(false)} className="btn btn-ghost btn-circle">
+            <FiX size={24} />
+          </button>
+        </div>
         <nav className="space-y-2">
           <a href="/" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-base-300 transition">
             <FiHome size={18} /> <span className="font-medium">Home</span>
@@ -84,11 +113,10 @@ function Dashboard({ user }) {
         </nav>
       </aside>
 
-
-      {/* Main content */}
+      {/* Main Content */}
       <main className="flex-1 p-4 overflow-y-auto">
-        {/* Navbar */}
-        <header className="flex justify-between items-center mb-6">
+        {/* Topbar */}
+        <header className="hidden md:flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <img
               src={user?.profilePic || '/default-avatar.png'}
@@ -102,7 +130,7 @@ function Dashboard({ user }) {
           </button>
         </header>
 
-        <h2 className="text-3xl font-bold mb-4 text-center">📄 User Dashboard</h2>
+        <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">📄 User Dashboard</h2>
 
         {(formsLoading || statsLoading) && (
           <div className="flex justify-center items-center mt-20">
@@ -118,7 +146,7 @@ function Dashboard({ user }) {
 
         {/* Stats Cards */}
         {!statsLoading && stats && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             <div className="card bg-base-100 shadow-md border">
               <div className="card-body">
                 <h2 className="card-title">Total Forms</h2>
@@ -142,7 +170,7 @@ function Dashboard({ user }) {
 
         {/* Forms List */}
         {!formsLoading && forms && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {forms.map((form, index) => {
               const isSubmitting = submitMutation.isLoading && submitMutation.variables === form._id;
               return (
