@@ -80,7 +80,10 @@ function Dashboard({ user }) {
 
       {/* Sidebar Drawer */}
       <aside
-        className={`bg-base-200 w-full md:w-64 p-4 flex-col border-r z-10 fixed top-0 left-0 h-full transform transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:block`}
+         className={`bg-base-200 w-full md:w-64 p-4 flex-col border-r z-10 fixed top-0 left-0 h-full transform transition-transform duration-300 ease-in-out 
+          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
+          md:translate-x-0 md:relative`}
+      
       >
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold">Menu</h2>
