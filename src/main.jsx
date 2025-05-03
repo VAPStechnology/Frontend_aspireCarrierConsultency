@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import App from "./App";
 import "./index.css";
+import { AuthProvider } from "./context/AuthProvider";
 
 // ✅ Configure caching and refetch behavior
 const queryClient = new QueryClient({
@@ -21,7 +22,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <AuthProvider>
+          {/* Wrap your app with AuthProvider to provide auth context */} 
+
         <App />
+        </AuthProvider>
+        {/* Toaster for notifications */}
         <Toaster position="top-right" />
       </BrowserRouter>
     </QueryClientProvider>

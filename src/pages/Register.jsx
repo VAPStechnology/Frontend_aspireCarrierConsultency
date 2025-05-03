@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import { z } from "zod";
-import { useAuth } from "../hooks/useAuth";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { uploadToCloudinary } from "../utils/cloudinaryUploader";
 import { handleUniqueFileSelection } from "../utils/fileHandler";
 
@@ -31,7 +31,6 @@ const registerSchema = z.object({
 
 function Register() {
   const navigate = useNavigate();
-  const { register } = useAuth();
 
   const [step, setStep] = useState("email");
   const [email, setEmail] = useState("");
@@ -41,6 +40,8 @@ function Register() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [aadhaarFile, setAadhaarFile] = useState(null);
   const [signatureFile, setSignatureFile] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
@@ -51,6 +52,8 @@ function Register() {
   const [signatureProgress, setSignatureProgress] = useState(0);
   const [photoProgress, setPhotoProgress] = useState(0);
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     if (aadhaarUrl) setAadhaarFile(null);
     if (signatureUrl) setSignatureFile(null);
@@ -60,7 +63,7 @@ function Register() {
   const handleSendOtp = async () => {
     if (!email) return toast.error("Email is required");
     try {
-      const res = await axios.post("/api/v1/auth/send-otp", { email });
+      const res = await axios.post(`${BASE_URL}/api/user/send-otp`, { email });
       toast.success(res.data.message || "OTP sent to your email");
       setStep("otp");
     } catch (error) {
@@ -70,7 +73,7 @@ function Register() {
 
   const handleVerifyOtp = async () => {
     try {
-      const res = await axios.post("/api/v1/auth/verify-otp", { email, otp });
+      const res = await axios.post(`${BASE_URL}/api/user/verify-otp`, { email, otp });
       toast.success(res.data.message || "Email verified!");
       setIsOtpVerified(true);
       setStep("register");
@@ -81,7 +84,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const validation = registerSchema.safeParse({
       name,
       email,
@@ -91,44 +94,47 @@ function Register() {
       signatureFile,
       photoFile,
     });
-
+  
     if (!validation.success) {
       validation.error.errors.forEach((error) => toast.error(error.message));
       return;
     }
-
+  
     try {
-      toast.loading("Uploading files...");
-      const uploadPromises = [];
-
-      if (!aadhaarUrl && aadhaarFile)
-        uploadPromises.push(uploadToCloudinary(aadhaarFile, setAadhaarProgress).then(setAadhaarUrl));
-      if (!signatureUrl && signatureFile)
-        uploadPromises.push(uploadToCloudinary(signatureFile, setSignatureProgress).then(setSignatureUrl));
-      if (!photoUrl && photoFile)
-        uploadPromises.push(uploadToCloudinary(photoFile, setPhotoProgress).then(setPhotoUrl));
-
-      const uploadedUrls = await Promise.all(uploadPromises);
+      toast.loading("Uploading documents...");
+  
+      // Step 1: Upload all files in parallel and wait
+      const [aadhaarUrl, signatureUrl, photoUrl] = await Promise.all([
+        uploadToCloudinary(aadhaarFile, setAadhaarProgress),
+        uploadToCloudinary(signatureFile, setSignatureProgress),
+        uploadToCloudinary(photoFile, setPhotoProgress),
+      ]);
+  
       toast.dismiss();
-
+  
+      // Step 2: Send to your backend
       const payload = {
         name,
         email,
         phone,
         password,
-        aadhaarUrl: aadhaarUrl || uploadedUrls[0],
-        signatureUrl: signatureUrl || uploadedUrls[1],
-        photoUrl: photoUrl || uploadedUrls[2],
+        aadhaar:aadhaarUrl,
+        signature:signatureUrl,
+        avatar:photoUrl,
       };
-
-      await register(payload);
-      toast.success("Registered successfully!");
-      navigate("/login");
-    } catch (error) {
+  
+      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/user/upload`, payload);
+  
+      toast.success("Registration successful!");
+      navigate("/register-alert");
+    } catch (err) {
       toast.dismiss();
-      toast.error(error.message || "Registration failed");
+      console.error("Error:", err?.response || err);
+      toast.error(err?.response?.data?.message || "Something went wrong");
     }
   };
+  
+  
 
   const renderProgress = (label, percent) => (
     <div className="mt-1">
@@ -153,7 +159,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@email.com"
-              className="input  input-bordered w-full mt-4"
+              className="input input-bordered w-full mt-4"
             />
             <button onClick={handleSendOtp} className="btn btn-primary w-full mt-4">Send OTP</button>
           </>
@@ -180,8 +186,8 @@ function Register() {
         )}
 
         {step === "register" && (
-          <form onSubmit={handleSubmit} className="space-y-4 ">
-            <h2 className="text-2xl font-bold text-center  text-gray-700">Create Account</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="text-2xl font-bold text-center text-gray-700">Create Account</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -213,19 +219,26 @@ function Register() {
                   className="input input-bordered w-full"
                 />
               </div>
-              <div>
+              <div className="relative">
                 <label className="label dark:text-orange-600">Password</label>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••"
-                  className="input input-bordered w-full"
+                  className="input input-bordered w-full pr-10"
                 />
+                <div
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-3 top-9 cursor-pointer text-gray-500"
+                >
+                  {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                </div>
               </div>
             </div>
 
-            {[{ label: "Aadhaar", file: aadhaarFile, url: aadhaarUrl, setter: setAadhaarFile, progress: aadhaarProgress },
+            {[
+              { label: "Aadhaar", file: aadhaarFile, url: aadhaarUrl, setter: setAadhaarFile, progress: aadhaarProgress },
               { label: "Signature", file: signatureFile, url: signatureUrl, setter: setSignatureFile, progress: signatureProgress },
               { label: "Photo", file: photoFile, url: photoUrl, setter: setPhotoFile, progress: photoProgress }
             ].map(({ label, file, url, setter, progress }) => (
