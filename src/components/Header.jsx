@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX } from 'react-icons/fi';
 import { useAuth } from "../hooks/useAuth"; // adjust the path if needed
 
@@ -13,12 +13,21 @@ function Header() {
     navigate('/login');
   };
 
+  const navLinkClass = ({ isActive }) =>
+    `font-medium transition ${isActive ? 'text-red-600' : 'text-gray-700 hover:text-teal-500'}`;
+  const DashLinkClass = ({ isActive }) =>
+    `font-medium transition ${isActive ? 'text-blue-500' : 'text-gray-700 hover:text-teal-500'}`;
+
   const menuLinks = (
     <>
-      <Link to="/" className="text-gray-700 hover:text-teal-500 font-medium transition">Home</Link>
-      <Link to="/services" className="text-gray-700 hover:text-teal-500 font-medium transition">Services</Link>
-      <Link to="/about" className="text-gray-700 hover:text-teal-500 font-medium transition">About Us</Link>
-      <Link to="/contact" className="text-gray-700 hover:text-teal-500 font-medium transition">Contact</Link>
+      <NavLink to="/" className={navLinkClass}>Home</NavLink>
+      <NavLink to="/services" className={navLinkClass}>Services</NavLink>
+      <NavLink to="/about" className={navLinkClass}>About Us</NavLink>
+      <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
+      {user && <NavLink to="/dashboard" className={navLinkClass}>Dashboard</NavLink>}
+      {user?.isAdmin === true && <NavLink to="/admin/dashboard" className={navLinkClass}>Admin Dashboard</NavLink>}
+      {user && <NavLink to="/dashboard/agreement" className={DashLinkClass}>Agreement</NavLink>}
+      {user && <NavLink to="/dashboard/submit-700-forms" className={DashLinkClass}>700-Forms</NavLink>}
     </>
   );
 
@@ -31,8 +40,8 @@ function Header() {
     </button>
   ) : (
     <>
-      <Link to="/login" className="px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition">Login</Link>
-      <Link to="/register" className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition">Register</Link>
+      <NavLink to="/login" className="px-4 py-2 border border-teal-500 text-teal-600 rounded-lg hover:bg-teal-50 transition">Login</NavLink>
+      <NavLink to="/register" className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition">Register</NavLink>
     </>
   );
 
@@ -48,8 +57,8 @@ function Header() {
     </button>
   ) : (
     <>
-      <Link to="/login" onClick={() => setIsOpen(false)} className="px-4 py-2 border border-teal-500 text-teal-600 rounded-lg text-center">Login</Link>
-      <Link to="/register" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-teal-500 text-white rounded-lg text-center">Register</Link>
+      <NavLink to="/login" onClick={() => setIsOpen(false)} className="px-4 py-2 border border-teal-500 text-teal-600 rounded-lg text-center">Login</NavLink>
+      <NavLink to="/register" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-teal-500 text-white rounded-lg text-center">Register</NavLink>
     </>
   );
 

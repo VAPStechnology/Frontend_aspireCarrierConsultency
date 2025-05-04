@@ -45,11 +45,11 @@ function App() {
           element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/login" />}
         />
         <Route
-          path="agreement"
+          path="/dashboard/agreement"
           element={user ? <Agreement /> : <Navigate to="/login" />}
         />
         <Route
-          path="submit-700-forms"
+          path="dashboard/submit-700-forms"
           element={user ? <Submit700Forms /> : <Navigate to="/login" />}
         />
 
