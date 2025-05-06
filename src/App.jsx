@@ -42,7 +42,7 @@ function App() {
         />
         <Route
           path="admin/dashboard"
-          element={user?.role === "admin" ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={user?.isAdmin === true ? <AdminDashboard /> : <Navigate to="/login" />}
         />
         <Route
           path="/dashboard/agreement"

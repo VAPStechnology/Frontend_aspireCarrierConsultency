@@ -24,10 +24,10 @@ function Header() {
       <NavLink to="/services" className={navLinkClass}>Services</NavLink>
       <NavLink to="/about" className={navLinkClass}>About Us</NavLink>
       <NavLink to="/contact" className={navLinkClass}>Contact</NavLink>
-      {user && <NavLink to="/dashboard" className={navLinkClass}>Dashboard</NavLink>}
+      {user?.isAdmin === false && <NavLink to="/dashboard" className={navLinkClass}>Dashboard</NavLink>}
       {user?.isAdmin === true && <NavLink to="/admin/dashboard" className={navLinkClass}>Admin Dashboard</NavLink>}
-      {user && <NavLink to="/dashboard/agreement" className={DashLinkClass}>Agreement</NavLink>}
-      {user && <NavLink to="/dashboard/submit-700-forms" className={DashLinkClass}>700-Forms</NavLink>}
+      {user?.isAdmin === false && <NavLink to="/dashboard/agreement" className={DashLinkClass}>Agreement</NavLink>}
+      {user?.isAdmin === false && <NavLink to="/dashboard/submit-700-forms" className={DashLinkClass}>700-Forms</NavLink>}
     </>
   );
 
