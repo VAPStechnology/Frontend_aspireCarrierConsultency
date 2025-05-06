@@ -70,7 +70,7 @@ function Dashboard() {
       }));
     } catch (error) {
       console.error(error);
-      toast.error("Failed to submit the form.");
+      toast.error("Failed!! Sign Agreement to Submit !!!.");
     }
   };
 
