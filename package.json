@@ -42,5 +42,10 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.4",
     "vite": "^6.3.1"
+  },
+  "overrides": {
+    "react-signature-canvas": {
+      "react": "^19.0.0"
+    }
   }
 }
