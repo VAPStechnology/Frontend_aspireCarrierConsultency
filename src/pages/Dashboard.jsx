@@ -48,7 +48,7 @@ function Dashboard() {
   // Submit form handler
 
   const handleSubmitForm = async (formId) => {
-    console.log("Submitting form with ID:", formId);
+    // console.log("Submitting form with ID:", formId);
     try {
       const headers = { Authorization: `Bearer ${token}` };
       await axios.patch(`https://aspirecareerconsultancy.store/api/user/forms/${formId}/submit`, {}, { headers });
@@ -132,11 +132,11 @@ function Dashboard() {
               <ul className="space-y-4">
                 {forms.map((form) => (
                   <li key={form._id} className="p-4 bg-white dark:bg-gray-800 shadow rounded-lg space-y-1">
-                    <p className="text-lg font-medium">Form #{form._id || '700'}</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Full Name: {form.data.fullName}</p>
+                    <p className="text-lg font-medium">Form #{form.data.formNumber || '700'}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">Full Name: {form.data.name}</p>
                     <p className="text-sm text-gray-700 dark:text-gray-300">Phone: {form.data.phoneNumber}</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">DOB: {form.data.dob}</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Gender: {form.data.gender}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">Email: {form.data.email}</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300">DOB: {form.data.dateOfBirth}</p>
                     <p className="text-sm text-gray-700 dark:text-gray-300">Address: {form.data.address}</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       Submitted: {form.submitted ? 'Yes' : 'No'}

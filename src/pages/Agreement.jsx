@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SignaturePad from 'react-signature-pad-wrapper';
 import { uploadToCloudinary } from '../utils/cloudinaryUploader.js';  // Import your Cloudinary upload function
+import LegalPage from '../components/LegalPage.jsx';
 
 function Agreement() {
   const [signature, setSignature] = useState('');
@@ -105,6 +106,7 @@ function Agreement() {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-xl space-y-6">
         <h2 className="text-3xl font-bold text-gray-800">User Agreement</h2>
+        <div><LegalPage/></div>
 
         <p className="text-gray-600">
           Please sign below to confirm you accept the terms and conditions of Aspire Career Consultancy.
