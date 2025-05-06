@@ -14,7 +14,7 @@ function UserRegisterAlert() {
 
         <p className="text-base text-base-content">
           Your data has been sent to the admin for <span className="font-semibold">registration and verification</span>.
-          If your information is valid, you'll receive your <span className="font-medium text-teal-600 dark:text-teal-400">email and password</span> shortly.
+          If your information is valid, you'll receive <span className="font-medium text-teal-600 dark:text-teal-400">email and password </span> on your email shortly.
         </p>
 
         <div className="mt-6 space-y-2">
