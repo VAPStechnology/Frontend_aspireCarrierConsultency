@@ -14,14 +14,12 @@ import Layout from "./Layout";
 import { useAuth } from "./hooks/useAuth.js";
 import UserRegisterAlert from "./pages/UserRegisterAlert.jsx";
 
+// New Admin Feature Pages
+import RegisterRequests from "./pages/RegisterRequests";
+import ContactMessages from "./pages/ContactMessages";
+
 function App() {
   const { user } = useAuth();
-  // console.log ("User in App:", user); // Check if user is correctly set
-  // console.log ("User role in App:", user?.role); // Check if user role is correctly set
-  // console.log ("User ID in App:", user?._id); // Check if user ID is correctly set
-  // console.log ("User accessToken in App:", user?.accessToken); // Check if user accessToken is correctly set
-  // console.log ("User refreshToken in App:", user?.refreshToken); // Check if user refreshToken is correctly set
-  // console.log ("User isAdmin in App:", user?.isAdmin); // Check if user isAdmin is correctly set  
 
   return (
     <Routes>
@@ -33,16 +31,12 @@ function App() {
         <Route path="services" element={<Services />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="/register-alert" element={<UserRegisterAlert/>}/>
+        <Route path="/register-alert" element={<UserRegisterAlert />} />
 
-        {/* Protected Routes */}
+        {/* Protected User Routes */}
         <Route
           path="dashboard"
-          element={user ? <Dashboard/> : <Navigate to="/login" />}
-        />
-        <Route
-          path="admin/dashboard"
-          element={user?.isAdmin === true ? <AdminDashboard /> : <Navigate to="/login" />}
+          element={user ? <Dashboard /> : <Navigate to="/login" />}
         />
         <Route
           path="/dashboard/agreement"
@@ -53,10 +47,19 @@ function App() {
           element={user ? <Submit700Forms /> : <Navigate to="/login" />}
         />
 
+        {/* Protected Admin Routes */}
+        <Route
+          path="admin/dashboard"
+          element={user?.isAdmin === true ? <AdminDashboard /> : <Navigate to="/login" />}
+        >
+          {/* Nested Routes under AdminDashboard */}
+          <Route path="register-requests" element={<RegisterRequests />} />
+          <Route path="contact-messages" element={<ContactMessages />} />
+        </Route>
       </Route>
 
-      {/* Fallback Route */}
-      <Route path="/register-alert" element={UserRegisterAlert}/>
+      {/* Fallback Routes */}
+      <Route path="/register-alert" element={UserRegisterAlert} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
