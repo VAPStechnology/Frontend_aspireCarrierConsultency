@@ -39,7 +39,7 @@ function Footer() {
           {/* Contact Us */}
           <div>
             <h3 className="text-xl font-bold mb-4 text-teal-300">Contact Us</h3>
-            <p className="mb-2 text-gray-300">consultancyaspirecareer@gmail.com</p>
+            <p className="mb-2 text-gray-300">consultancyaspire5@gmail.com</p>
             <address className="text-gray-300 not-italic leading-relaxed">
               ©2020-05B, Sanow Nagar,<br />
               HUDA Complex Area,<br />
