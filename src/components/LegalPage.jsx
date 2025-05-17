@@ -52,6 +52,9 @@ const LegalPage = () => {
           <li className="p-2 bg-base-200 rounded">Do please complete the entire work in a single computer or laptop. Swapping(Changing) of computer or laptop is highly prohibited due to security purposes.</li>
           <li className="p-2 bg-base-200 rounded">Never ever submit completely blank forms. Submission of blank forms may be corrupt your package.</li>
           <li className="p-2 bg-base-200 rounded">You can login as many times as you can but you have to logout every time during breaks.</li>
+          <li className="p-2 bg-base-200 rounded">If the work is not completed within 6 days or there is problem on your behalf in the login logout or you can not do all the things written above in guidance of company's legal advisors than as you know , no registration fee is taken, so you may have to deposit a refundable security amount of 4,000 rupees(four thousands) for the loss of company's package and manpower.</li>
+          <li className="p-2 bg-base-200 rounded">If the work is not completed within 6 days by you than in between 6 days you can opt for NOC or extra 3 days extention to complete the work . For this you have to pay refundable security amount of 4,000 rupees. So keep in mind and complete the work within given 6 days. The package given to you costs 25,000 (Twenty-five thousands) for work, so donot destroy it , do please complete it. </li>
+          <li className="p-2 bg-base-200 rounded"> So you are requested to complete the work on time and keep in mind all above points. </li>
         </ol>
       </div>
 
