@@ -10,6 +10,7 @@ const UserForm = () => {
     const [forms, setForms] = useState([]);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
 
     const admin = JSON.parse(localStorage.getItem('user'));
     const token = admin?.accessToken;
@@ -30,11 +31,24 @@ const UserForm = () => {
         try {
             const res = await axios.get(`https://aspirecareerconsultancy.store/api/admin/forms/${id}`, { headers });
             setForms(res.data?.data || []);
+            if (res.data?.data.length === 0) {
+                toast.error('No forms available for this user');
+
+            }
+            let userData = res.data?.data[0]?.user.name || 'not Found';
+            // console.log(userData);
+            if (userData) {
+                setUser(userData);
+            } else {
+                toast.error('User not found');
+            }
+            
         } catch (err) {
             toast.error('Failed to fetch forms');
         } finally {
             setLoading(false);
         }
+
     };
 
     const fetchStats = async () => {
@@ -67,6 +81,7 @@ const UserForm = () => {
             </button>
 
             <h2 className="text-2xl font-bold">Forms of User ID: {id}</h2>
+            <h3 className="text-lg font-semibold">User Name: {user}</h3>
 
             {stats && (
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
