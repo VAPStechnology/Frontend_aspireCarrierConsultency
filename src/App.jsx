@@ -13,6 +13,7 @@ import Services from "./pages/Services";
 import Layout from "./Layout";
 import { useAuth } from "./hooks/useAuth.js";
 import UserRegisterAlert from "./pages/UserRegisterAlert.jsx";
+import UserForm from "./pages/UserForm.jsx";
 
 // New Admin Feature Pages
 import RegisterRequests from "./pages/RegisterRequests";
@@ -52,9 +53,9 @@ function App() {
           path="admin/dashboard"
           element={user?.isAdmin === true ? <AdminDashboard /> : <Navigate to="/login" />}
         >
-          {/* Nested Routes under AdminDashboard */}
           <Route path="register-requests" element={<RegisterRequests />} />
           <Route path="contact-messages" element={<ContactMessages />} />
+          <Route path="users/:id/forms" element={<UserForm />} />
         </Route>
       </Route>
 

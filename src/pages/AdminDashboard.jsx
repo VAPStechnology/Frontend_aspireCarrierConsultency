@@ -226,7 +226,11 @@ function AdminDashboard() {
             {/* Users Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {users.map((user) => (
-                <div key={user._id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-3">
+                <div
+                  key={user._id}
+                  className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow space-y-3 cursor-pointer hover:ring-2 hover:ring-blue-500"
+                  onClick={() => navigate(`users/${user._id}/forms`)}
+                >
                   <p className="text-xl font-semibold">{user.name}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-300">{user.email}</p>
                   <p className="text-sm">
@@ -237,13 +241,19 @@ function AdminDashboard() {
                   </p>
                   <div className="flex gap-4">
                     <button
-                      onClick={() => handleUserAction(user._id, user.isBlocked ? 'unblock' : 'block')}
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent card click
+                        handleUserAction(user._id, user.isBlocked ? 'unblock' : 'block');
+                      }}
                       className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700 transition"
                     >
                       {user.isBlocked ? 'Unblock' : 'Block'}
                     </button>
                     <button
-                      onClick={() => handleUserAction(user._id, 'delete')}
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent card click
+                        handleUserAction(user._id, 'delete');
+                      }}
                       className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
                     >
                       Delete
